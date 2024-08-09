@@ -8,10 +8,9 @@ class FileSaver:
 
     def _create_empty_files(self):
         for file in self.files:
-            file_path = file.name
-            if hasattr(file, "directory"):
-                file_path = os.path.join(file.directory, file.name)
+            file_path = os.path.join(file.directory, file.name) if file.directory else file.name
+            if file.directory:
                 os.makedirs(file.directory, exist_ok=True)
-            with open(file_path, 'w') as f:
+            with open(file_path, 'wb') as f:
                 f.seek(file.length - 1)
-                f.write('0')
+                f.write(b'\0')

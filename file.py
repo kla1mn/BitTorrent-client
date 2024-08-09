@@ -1,11 +1,11 @@
+import os
+
+
 class File:
-    def __init__(self, name, length, directory=None):
-        if directory is not None:
-            self.directory = directory
-        self.name = name
+    def __init__(self, directory, length):
+        self.directory = os.path.dirname(directory)  # TODO проверить на большой вложенности: if directory else ""
+        self.name = os.path.basename(directory)  # TODO проверить на большой вложенности: if directory else directory
         self.length = length
 
     def __str__(self):
-        return f'directory: {self.directory}, name: {self.name}, length: {self.length}' \
-            if hasattr(self, 'directory') \
-            else f'directory: no directory, name: {self.name}, length: {self.length}'
+        return f'name: {self.name}, directory: {self.directory}, length: {self.length}'

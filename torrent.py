@@ -12,8 +12,7 @@ class Torrent:
         self._announce_list = data['announce-list']
         self._info = info = data['info']
         self._name = info['name']
-        self._pieces = info['pieces']  # строка с длиной кратной 20, каждый кусок длиной 20 у разбитой строки,
-        # это SHA1 hash соответсвующего куска
+        self._pieces = info['pieces']
         self._bytes_count_per_piece = info['piece length']
         self.files = Torrent.create_files(info)
 
@@ -27,11 +26,6 @@ class Torrent:
     @staticmethod
     def create_files(info: dict) -> list[File]:
         """Returns list with torrent file if content contains only one file and array of files otherwise."""
-        if "length" in info:
-            return [File(name=info["name"], length=info["length"])]
-        files = []
-        for file in info["files"]:
-            file = File(name=file["path"][0], length=file["length"], directory=info["name"])
-            print(file)
-            files.append(file)
-        return files
+        return [File(info["name"], info["length"])] \
+            if "length" in info \
+            else [File("/".join([info["name"]] + file["path"]), file["length"]) for file in info["files"]]
