@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35091b4e-6446-4f64-b3be-6d888d8eedf6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/torrent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[M1] Stray [P] [RUS + ENG + 14] (2022) (1.5) [App Store] [rutracker-6452328].torrent" beforeDir="false" afterPath="$PROJECT_DIR$/stray.torrent" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/torrent.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +101,7 @@
       <workItem from="1717061898269" duration="4000" />
       <workItem from="1717062971410" duration="795000" />
       <workItem from="1717490919066" duration="13000" />
-      <workItem from="1723021602597" duration="5571000" />
+      <workItem from="1723021602597" duration="6505000" />
     </task>
     <servers />
   </component>

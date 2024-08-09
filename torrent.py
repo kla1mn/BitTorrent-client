@@ -7,24 +7,14 @@ class Torrent:
     def __init__(self, file):
         data = Torrent.decode_file(file)
         self._data = data
-        self._encoding = data['encoding']
         self._announce = data['announce']
         self._announce_list = data['announce-list']
         self._info = info = data['info']
-
-        if 'length' in info:
-            self._length = info['length']  # если один файл
-        if 'files' in info:
-            self._files = info['files']  # если несколько файлов
-
-        # название файла или директории, куда надо сохранить контент
         self._name = info['name']
 
         # строка с длиной кратной 20, каждый кусок длиной 20 у разбитой строки, это SHA1 hash соответсвующего куска
         self._pieces = info['pieces']
-
-        # количество байтов в каждом куске файла
-        self._pieces_length = info['piece length']
+        self._bytes_count_per_piece = info['piece length']
         self.files = Torrent.create_files(info)
 
     @staticmethod
@@ -35,14 +25,11 @@ class Torrent:
         return bencode.decode(data)
 
     @staticmethod
-    def create_files(info):
-        # TODO docs
+    def create_files(info: dict) -> list[File]:
+        """Returns list with torrent file if content contains only one file and array of files otherwise."""
         if "length" in info:
             return [File(info["name"], info["length"])]
-
         files = []
-        for data in info["files"]:
-            parts = [info["name"]] + data["path"]
-            path = "/".join(parts)
-            files.append(File(path, data["length"]))
+        for file in info["files"]:
+            files.append(File('/'.join(file["path"]), file["length"]))
         return files
