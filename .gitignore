@@ -6,3 +6,5 @@ Include/
 Lib/
 amanita.torrent
 stray.torrent
+.idea
+.venv
