@@ -33,3 +33,5 @@ class Torrent:
     def info_hash(self) -> bytes:
         """Returns nash of info's dictionary of torrent data in bytes."""
         return hashlib.sha1(bencode.encode(self._info)).digest()
+
+    

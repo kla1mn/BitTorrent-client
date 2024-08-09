@@ -1,3 +1,4 @@
+import peer
 import torrent
 from file_saver import FileSaver
 
