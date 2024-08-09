@@ -4,7 +4,8 @@ ENV/
 bin/
 Include/
 Lib/
-amanita.torrent
-stray.torrent
+Torrent files/amanita.torrent
+Torrent files/stray.torrent
 .idea
 .venv
+Torrent files

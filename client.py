@@ -3,7 +3,7 @@ from file_saver import FileSaver
 
 
 def main():
-    file_name = "amanita.torrent"
+    file_name = "Torrent files/amanita.torrent"
     data = torrent.Torrent(file_name)
     file_saver = FileSaver(data)
 
