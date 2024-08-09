@@ -1,3 +1,4 @@
+import hashlib
 import bencode
 
 from collections import OrderedDict
@@ -6,15 +7,14 @@ from file import File
 
 class Torrent:
     def __init__(self, file):
-        data = Torrent.decode_file(file)
-        self._data = data
-        self._announce = data['announce']
-        self._announce_list = data['announce-list']
-        self._info = info = data['info']
-        self._name = info['name']
-        self._pieces = info['pieces']
-        self._bytes_count_per_piece = info['piece length']
-        self.files = Torrent.create_files(info)
+        self._data = Torrent.decode_file(file)
+        self._announce = self._data['announce']
+        self._announce_list = self._data['announce-list']
+        self._info = self._data['info']
+        self._name = self._info['name']
+        self._pieces = self._info['pieces']
+        self._bytes_count_per_piece = self._info['piece length']
+        self.files = Torrent.create_files(self._info)
 
     @staticmethod
     def decode_file(torrent_file: str) -> OrderedDict:
@@ -29,3 +29,7 @@ class Torrent:
         return [File(info["name"], info["length"])] \
             if "length" in info \
             else [File("/".join([info["name"]] + file["path"]), file["length"]) for file in info["files"]]
+
+    def info_hash(self) -> bytes:
+        """Returns nash of info's dictionary of torrent data in bytes."""
+        return hashlib.sha1(bencode.encode(self._info)).digest()
