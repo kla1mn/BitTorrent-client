@@ -1,4 +1,5 @@
 import bencode
+
 from collections import OrderedDict
 from file import File
 
@@ -11,9 +12,8 @@ class Torrent:
         self._announce_list = data['announce-list']
         self._info = info = data['info']
         self._name = info['name']
-
-        # строка с длиной кратной 20, каждый кусок длиной 20 у разбитой строки, это SHA1 hash соответсвующего куска
-        self._pieces = info['pieces']
+        self._pieces = info['pieces']  # строка с длиной кратной 20, каждый кусок длиной 20 у разбитой строки,
+        # это SHA1 hash соответсвующего куска
         self._bytes_count_per_piece = info['piece length']
         self.files = Torrent.create_files(info)
 
@@ -28,8 +28,10 @@ class Torrent:
     def create_files(info: dict) -> list[File]:
         """Returns list with torrent file if content contains only one file and array of files otherwise."""
         if "length" in info:
-            return [File(info["name"], info["length"])]
+            return [File(name=info["name"], length=info["length"])]
         files = []
         for file in info["files"]:
-            files.append(File('/'.join(file["path"]), file["length"]))
+            file = File(name=file["path"][0], length=file["length"], directory=info["name"])
+            print(file)
+            files.append(file)
         return files
