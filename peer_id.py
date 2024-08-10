@@ -2,7 +2,7 @@ import random
 import string
 
 
-class Peer:
+class PeerId:
     def __init__(self):
         self.peer_id = self.generate_peer_id()
 
