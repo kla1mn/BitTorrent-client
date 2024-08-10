@@ -17,7 +17,12 @@ class Tracker:
         self._peer_id = peer_id
 
     async def get_peers(self):
-        return await self._request_peers_data()
+        data = await self._request_peers_data()
+        peers = self._parse_peers(data["peers"])
+        for peer in peers:
+            print(f"{peer[0]}:{peer[1]}")
+        print(f"{len(peers)} peers found")
+        return peers
 
     async def _request_peers_data(self):
         url = f"{self._torrent.announce_url}?{self._get_quoted_parameters()}"
@@ -25,8 +30,8 @@ class Tracker:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as response:
                     if response.status == 200:
-                        content = await response.read()
-                        print(bencode.decode(content)["peers"])
+                        data = await response.read()
+                        return bencode.decode(data)
                     else:
                         print(f"Response error: {response.status}")
         except Exception as e:
@@ -47,3 +52,12 @@ class Tracker:
         return "&".join(
             f"{key}={urllib.parse.quote_from_bytes(value) if key == 'info_hash' else urllib.parse.quote(str(value))}"
             for key, value in self._get_parameters().items())
+
+    @staticmethod
+    def _parse_peers(data):
+        peers = []
+        for i in range(0, len(data), 6):
+            ip = '.'.join(f"{block}" for block in data[i:i + 4])
+            port = data[i + 4] * 256 + data[i + 5]
+            peers.append((ip, port))
+        return peers
