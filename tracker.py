@@ -17,9 +17,11 @@ class Tracker:
         self._torrent = torrent
         self._peer_id = peer_id
 
-    async def get_peers(self) -> list[tuple[str, str]]:
+    async def get_peers(self) -> list[tuple[str, str]] | None:
         """Returns array of parsed peers."""
         data = await self._request_peers_data()
+        if not data:
+            return None
         peers = self._parse_peers(data["peers"])
         return peers
 
