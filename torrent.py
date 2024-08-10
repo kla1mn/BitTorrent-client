@@ -8,13 +8,18 @@ from file import File
 class Torrent:
     def __init__(self, file):
         self._data = Torrent.decode_file(file)
-        self._announce = self._data['announce']
-        self._announce_list = self._data['announce-list']
+        self._announce_url = self._data['announce']
+        # self._announce_list = self._data['announce-list']
         self._info = self._data['info']
         self._name = self._info['name']
         self._pieces = self._info['pieces']
         self._bytes_count_per_piece = self._info['piece length']
         self.files = Torrent.create_files(self._info)
+        self.size = str(sum(file.length for file in self.files))
+
+    @property
+    def announce_url(self):
+        return self._announce_url
 
     @staticmethod
     def decode_file(torrent_file: str) -> OrderedDict:
@@ -34,4 +39,3 @@ class Torrent:
         """Returns nash of info's dictionary of torrent data in bytes."""
         return hashlib.sha1(bencode.encode(self._info)).digest()
 
-    

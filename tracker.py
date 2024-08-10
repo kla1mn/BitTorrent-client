@@ -1,0 +1,49 @@
+import urllib.parse
+import aiohttp
+from enum import StrEnum
+
+import bencode
+
+
+class Events(StrEnum):
+    started = "started"
+    stopped = "stopped"
+    completed = "completed"
+
+
+class Tracker:
+    def __init__(self, torrent, peer_id):
+        self._torrent = torrent
+        self._peer_id = peer_id
+
+    async def get_peers(self):
+        return await self._request_peers_data()
+
+    async def _request_peers_data(self):
+        url = f"{self._torrent.announce_url}?{self._get_quoted_parameters()}"
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        content = await response.read()
+                        print(bencode.decode(content)["peers"])
+                    else:
+                        print(f"Response error: {response.status}")
+        except Exception as e:
+            print(f"Exception: {e}")
+
+    def _get_parameters(self):
+        return {
+            "info_hash": self._torrent.info_hash(),
+            "peer_id": self._peer_id,
+            "port": 6881,
+            "uploaded": 0,
+            "downloaded": 0,
+            "left": self._torrent.size,
+            "event": Events.started.value
+        }
+
+    def _get_quoted_parameters(self):
+        return "&".join(
+            f"{key}={urllib.parse.quote_from_bytes(value) if key == 'info_hash' else urllib.parse.quote(str(value))}"
+            for key, value in self._get_parameters().items())
