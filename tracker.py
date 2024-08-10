@@ -58,6 +58,6 @@ class Tracker:
         peers = []
         for i in range(0, len(data), 6):
             ip = '.'.join(f"{block}" for block in data[i:i + 4])
-            port = data[i + 4] * 256 + data[i + 5]
+            port = data[i + 4] * 256 + data[i + 5]  # умножаем на 256 для сдвига на 8 битов влево
             peers.append((ip, port))
         return peers
