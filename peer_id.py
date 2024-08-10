@@ -7,7 +7,8 @@ class PeerId:
         self.peer_id = self.generate_peer_id()
 
     @staticmethod
-    def generate_peer_id():
+    def generate_peer_id() -> str:
+        """Returns randomly generated peer id in format with prefix 'FIIT-'."""
         return "FIIT-" + ''.join(random.choices(string.ascii_letters + string.digits, k=15))
 
     def __str__(self):
