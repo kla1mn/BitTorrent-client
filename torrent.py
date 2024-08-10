@@ -14,12 +14,20 @@ class Torrent:
         self._name = self._info['name']
         self._pieces = self._info['pieces']
         self._bytes_count_per_piece = self._info['piece length']
-        self.files = Torrent.create_files(self._info)
-        self.size = str(sum(file.length for file in self.files))
+        self._files = Torrent.create_files(self._info)
+        self.size = sum(file.length for file in self.files)
 
     @property
     def announce_url(self):
         return self._announce_url
+
+    @property
+    def files(self):
+        return self._files
+
+    def info_hash(self) -> bytes:
+        """Returns hash of info's dictionary of torrent data in bytes."""
+        return hashlib.sha1(bencode.encode(self._info)).digest()
 
     @staticmethod
     def decode_file(torrent_file: str) -> OrderedDict:
@@ -34,8 +42,3 @@ class Torrent:
         return [File(info["name"], info["length"])] \
             if "length" in info \
             else [File("/".join([info["name"]] + file["path"]), file["length"]) for file in info["files"]]
-
-    def info_hash(self) -> bytes:
-        """Returns nash of info's dictionary of torrent data in bytes."""
-        return hashlib.sha1(bencode.encode(self._info)).digest()
-

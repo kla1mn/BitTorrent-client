@@ -1,8 +1,8 @@
-import urllib.parse
-import aiohttp
-from enum import StrEnum
-
 import bencode
+import aiohttp
+import urllib.parse
+
+from enum import StrEnum
 
 
 class Events(StrEnum):
