@@ -1,21 +1,33 @@
 import hashlib
+import logging
 import bencode
 
-from collections import OrderedDict
 from file import File
+from collections import OrderedDict
+from config import LOGGING_LEVEL
+
+logger = logging.getLogger(__name__)
+logger.setLevel(LOGGING_LEVEL)
 
 
 class Torrent:
     def __init__(self, file):
         self._data = Torrent.decode_file(file)
+        logger.debug("Torrent data decoded")
         self._announce_url = self._data['announce']
         # self._announce_list = self._data['announce-list']
         self._info = self._data['info']
         self._name = self._info['name']
         self._pieces = self._info['pieces']
         self._bytes_count_per_piece = self._info['piece length']
+        logger.debug("Created fields with torrent info")
         self._files = Torrent.create_files(self._info)
+        logger.debug("Received list with directories of torrent files")
         self.size = sum(file.length for file in self.files)
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def announce_url(self):
@@ -31,9 +43,10 @@ class Torrent:
 
     @staticmethod
     def decode_file(torrent_file: str) -> OrderedDict:
-        """Returns ordered dictionary with torrent data."""
+        """Returns decoded ordered dictionary with data from bencoded torrent file."""
         with open(torrent_file, "rb") as file:
             data = file.read()
+        logger.debug(f"Read bencoded data from {torrent_file}")
         return bencode.decode(data)
 
     @staticmethod
