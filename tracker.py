@@ -17,13 +17,19 @@ class Events(StrEnum):
     COMPLETED = "completed"
 
 
+class Peer:
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
+
+
 class Tracker:
     def __init__(self, torrent, peer_id):
         self._torrent = torrent
         self._peer_id = peer_id
         logger.debug("Tracker initialized")
 
-    async def get_peers(self) -> list[tuple[str, str]] | None:
+    async def get_peers(self) -> list[Peer] | None:
         """Returns array of parsed peers."""
         data = await self._request_peers_data()
         if not data:
@@ -33,7 +39,7 @@ class Tracker:
         for peer in peers:
             logger.debug(f"Received peer: {peer}")
         logger.info(f"Received peers total count: {len(peers)}")
-        return peers
+        return [Peer(peer[0], peer[1]) for peer in peers]
 
     async def _request_peers_data(self) -> collections.OrderedDict | None:
         """Makes https request to get data from torrent and returns this data if successful
