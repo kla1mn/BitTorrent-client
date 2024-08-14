@@ -1,7 +1,7 @@
 import asyncio
-import torrent
 import logging
 
+from torrent import Torrent
 from tracker import Tracker
 from file_saver import FileSaver
 from config import LOGGING_LEVEL
@@ -13,16 +13,16 @@ logger.setLevel(LOGGING_LEVEL)
 
 
 async def main():
-    file_name = "Torrent files/stray.torrent"
+    file_name = "Torrent files/green_day.torrent"
     logging.debug(f"Starting torrent download: {file_name}")
     try:
-        data = torrent.Torrent(file_name)
+        data = Torrent(file_name)
         file_saver = FileSaver(data)
         peer_id = generate_peer_id()
         tracker = Tracker(data, peer_id)
         peers = await tracker.get_peers()
-        connections = [PeerConnection(peer.ip, peer.port) for peer in peers]
-        tasks = [peer_connection.download() for peer_connection in connections]
+        connections = [PeerConnection(peer.ip, peer.port, data, peer_id) for peer in peers]
+        tasks = [peer.download() for peer in connections]
         await asyncio.gather(*tasks)
     except Exception as e:
         logger.debug(f"An error occurred: {e}")
