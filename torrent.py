@@ -20,6 +20,7 @@ class Torrent:
         self._name = self._info['name']
         self._pieces = self._info['pieces']
         self._bytes_count_per_piece = self._info['piece length']
+        self._pieces_count = len(self._pieces) // 20
         logger.debug("Created fields with torrent info")
         self._files = Torrent.create_files(self._info)
         logger.debug("Received list with directories of torrent files")
@@ -36,6 +37,10 @@ class Torrent:
     @property
     def files(self):
         return self._files
+
+    @property
+    def pieces_count(self):
+        return self._pieces_count
 
     def info_hash(self) -> bytes:
         """Returns hash of info's dictionary of torrent data in bytes."""
