@@ -6,6 +6,7 @@ from tracker import Tracker
 from file_saver import FileSaver
 from config import LOGGING_LEVEL
 from utils import generate_peer_id
+from collections import defaultdict
 from peer_connection import PeerConnection
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,8 @@ async def main():
         peer_id = generate_peer_id()
         tracker = Tracker(data, peer_id)
         peers = await tracker.get_peers()
-        connections = [PeerConnection(peer.ip, peer.port, data, peer_id) for peer in peers]
+        piece_rarity = defaultdict(int)
+        connections = [PeerConnection(peer.ip, peer.port, data, peer_id, piece_rarity) for peer in peers]
         tasks = [peer.download() for peer in connections]
         await asyncio.gather(*tasks)
     except Exception as e:

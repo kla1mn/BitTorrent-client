@@ -21,66 +21,15 @@ class MessageType(IntEnum):
     CANCEL = 8
 
 
-"""def choke():
-    pass
-
-
-def unchoke():
-    pass
-
-
-def interested():
-    pass
-
-
-def not_interested():
-    pass
-
-
-def have():
-    pass
-
-
-def bitfield():
-    pass
-
-
-def request():
-    pass
-
-
-def piece():
-    pass
-
-
-def cancel():
-    pass
-
-
-def default(message_id):
-    logger.debug(f"Message: Unknown message type: {message_id}")
-
-SWITCH_MESSAGE_ID = {
-    "0": choke,
-    "1": unchoke,
-    "2": interested,
-    "3": not_interested,
-    "4": have,
-    "5": bitfield,
-    "6": request,
-    "7": piece,
-    "8": cancel
-}"""
-
-
 class PeerConnection:
-    def __init__(self, ip, port, torrent, peer_id):
+    def __init__(self, ip, port, torrent, peer_id, piece_rarity):
         self._ip, self._port = ip, port
         self._torrent = torrent
         self._peer_id = peer_id
         self._reader, self._writer = None, None
         self._chocked = True
         self._available_pieces = None
+        self._piece_rarity = piece_rarity
 
     async def download(self):
         try:
@@ -139,8 +88,13 @@ class PeerConnection:
             elif message_id == MessageType.BITFIELD:
                 self._available_pieces = bitstring.BitArray(bytes=message[1:], length=self._torrent.pieces_count)
                 logger.debug(f"Message: Bit field hex: {self._available_pieces}")
-                bitfield_binary = ''.join(format(byte, '08b') for byte in message[1:])
-                logger.debug(f"Message: Bit field bin: {bitfield_binary}")
+                # bitfield_binary = ''.join(format(byte, '08b') for byte in message[1:])
+                # logger.debug(f"Message: Bit field bin: {bitfield_binary}")
+                for i in range(self._torrent.pieces_count):
+                    if self._available_pieces[i]:
+                        self._piece_rarity[i] += 1
+                    else:
+                        self._piece_rarity[i] = max(0, self._piece_rarity[i] - 1)
                 await self._send_interested_message()
 
             elif message_id == MessageType.REQUEST:
