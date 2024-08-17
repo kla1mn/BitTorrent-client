@@ -10,7 +10,7 @@ logging.basicConfig(level=LOGGING_LEVEL)
 
 
 class MessageType(IntEnum):
-    CHOKE = 0,
+    CHOKE = 0
     UNCHOKE = 1
     INTERESTED = 2
     NOT_INTERESTED = 3
@@ -21,6 +21,58 @@ class MessageType(IntEnum):
     CANCEL = 8
 
 
+"""def choke():
+    pass
+
+
+def unchoke():
+    pass
+
+
+def interested():
+    pass
+
+
+def not_interested():
+    pass
+
+
+def have():
+    pass
+
+
+def bitfield():
+    pass
+
+
+def request():
+    pass
+
+
+def piece():
+    pass
+
+
+def cancel():
+    pass
+
+
+def default(message_id):
+    logger.debug(f"Message: Unknown message type: {message_id}")
+
+SWITCH_MESSAGE_ID = {
+    "0": choke,
+    "1": unchoke,
+    "2": interested,
+    "3": not_interested,
+    "4": have,
+    "5": bitfield,
+    "6": request,
+    "7": piece,
+    "8": cancel
+}"""
+
+
 class PeerConnection:
     def __init__(self, ip, port, torrent, peer_id):
         self._ip, self._port = ip, port
@@ -28,7 +80,7 @@ class PeerConnection:
         self._peer_id = peer_id
         self._reader, self._writer = None, None
         self._chocked = True
-        self._have_pieces = None
+        self._available_pieces = None
 
     async def download(self):
         try:
@@ -49,18 +101,18 @@ class PeerConnection:
         logger.info(f"Got handshake, peer id: {response[48:]}")
 
         while True:
-            len_bytes = await self._read(4)
-            if not len_bytes:
+            len_bytes_to_read = await self._read(4)
+            if not len_bytes_to_read:
                 logger.debug("No more bytes. Disconnecting")
                 break
 
-            len_value = int.from_bytes(len_bytes, byteorder='big')
-            logger.debug(f"Received {len_value} bytes")
-            if len_value == 0:
+            len_value_to_read = int.from_bytes(len_bytes_to_read, byteorder='big')
+            logger.debug(f"Received {len_value_to_read} bytes of data")
+            if len_value_to_read == 0:
                 logger.debug("Keep alive")
                 continue
 
-            message = await self._read(len_value)
+            message = await self._read(len_value_to_read)
             if not message:
                 logger.debug("Can't read message. Disconnecting")
                 break
@@ -70,30 +122,36 @@ class PeerConnection:
             if message_id == MessageType.CHOKE:
                 logger.debug("Message: Choke")
                 self._chocked = True
+
             elif message_id == MessageType.UNCHOKE:
                 logger.debug("Message: Unchoke")
                 self._chocked = False
+
             elif message_id == MessageType.INTERESTED:
                 logger.debug("Message: Interested")
+
             elif message_id == MessageType.NOT_INTERESTED:
                 logger.debug("Message: Not Interested")
+
             elif message_id == MessageType.HAVE:
                 logger.debug("Message: Have")
+
             elif message_id == MessageType.BITFIELD:
-                self._have_pieces = bitstring.BitArray(bytes=message[1:], length=self._torrent.pieces_count)
-                logger.debug(f"Message: Bit field hex: {self._have_pieces}")
+                self._available_pieces = bitstring.BitArray(bytes=message[1:], length=self._torrent.pieces_count)
+                logger.debug(f"Message: Bit field hex: {self._available_pieces}")
                 bitfield_binary = ''.join(format(byte, '08b') for byte in message[1:])
                 logger.debug(f"Message: Bit field bin: {bitfield_binary}")
-                interested_message = b"\0\0\0\1\2"
-                logger.debug(f"Sending message: Interested")
-                await self._write(interested_message)
+                await self._send_interested_message()
 
             elif message_id == MessageType.REQUEST:
                 logger.debug("Message: Request")
+
             elif message_id == MessageType.PIECE:
                 logger.debug("Message: Piece")
+
             elif message_id == MessageType.CANCEL:
                 logger.debug("Message: Cancel")
+
             else:
                 logger.debug(f"Message: Unknown message type: {message_id}")
 
@@ -101,9 +159,15 @@ class PeerConnection:
         await self._writer.wait_closed()
         logger.debug("Connection closed")
 
+    async def _send_interested_message(self):
+        interested_message = b"\0\0\0\1\2"  # 4 байта длина сообщения, 5-ый байт - код сообщения
+        logger.debug(f"Sending message: Interested")
+        await self._write(interested_message)
+
     async def _read(self, n):
         try:
             data = await self._reader.readexactly(n)
+            logger.debug(f"Read: Received {n} bytes from {self._ip}:{self._port}")
             return data
         except asyncio.IncompleteReadError as e:
             logger.error(f"Incomplete read error: expected {n} bytes, but got {len(e.partial)} bytes")
@@ -114,10 +178,11 @@ class PeerConnection:
 
     async def _write(self, data):
         self._writer.write(data)
-        logger.debug(f"Writing data to {self._ip}:{self._port}")
+        logger.debug(f"Write: Sending data to {self._ip}:{self._port}")
         await self._writer.drain()
 
     def _generate_handshake(self) -> bytes:
+        """Returns generated handshake for first request with peer."""
         return b"".join([chr(19).encode(),
                          b"BitTorrent protocol",
                          b"\0" * 8,

@@ -11,6 +11,8 @@ from peer_connection import PeerConnection
 logger = logging.getLogger(__name__)
 logger.setLevel(LOGGING_LEVEL)
 
+__author__ = "https://github.com/kla1mn"
+
 
 async def main():
     file_name = "Torrent files/green_day.torrent"

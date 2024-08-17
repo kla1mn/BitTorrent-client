@@ -39,7 +39,7 @@ class Tracker:
         for peer in peers:
             logger.debug(f"Received peer: {peer}")
         logger.info(f"Received peers total count: {len(peers)}")
-        return [Peer(peer[0], peer[1]) for peer in peers]
+        return [Peer(ip=peer[0], port=peer[1]) for peer in peers]
 
     async def _request_peers_data(self) -> collections.OrderedDict | None:
         """Makes https request to get data from torrent and returns this data if successful
