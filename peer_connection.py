@@ -3,10 +3,13 @@ import logging
 import bitstring
 
 from enum import IntEnum
+
 from config import LOGGING_LEVEL
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=LOGGING_LEVEL)
+
+BLOCK_SIZE = 2 ** 14
 
 
 class MessageType(IntEnum):
@@ -86,7 +89,7 @@ class PeerConnection:
 
             elif message_id == MessageType.BITFIELD:
                 self._available_pieces = bitstring.BitArray(bytes=message[1:], length=self._torrent.pieces_count)
-                logger.debug(f"Message: Bit field hex: {self._available_pieces}")
+                logger.debug(f"Message: Bit field: {self._available_pieces}")
                 # bitfield_binary = ''.join(format(byte, '08b') for byte in message[1:])
                 # logger.debug(f"Message: Bit field bin: {bitfield_binary}")
                 await self._send_interested_message()

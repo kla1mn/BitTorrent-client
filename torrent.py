@@ -46,6 +46,10 @@ class Torrent:
         """Returns hash of info's dictionary of torrent data in bytes."""
         return hashlib.sha1(bencode.encode(self._info)).digest()
 
+    def get_piece_hash(self, index: int):
+        """Returns hash of piece at given index."""
+        return self._pieces[index * 20:index * 20 + 20]
+
     @staticmethod
     def decode_file(torrent_file: str) -> OrderedDict:
         """Returns decoded ordered dictionary with data from bencoded torrent file."""

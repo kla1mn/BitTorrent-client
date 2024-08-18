@@ -15,7 +15,7 @@ __author__ = "https://github.com/kla1mn"
 
 
 async def main():
-    file_name = "Torrent files/green_day.torrent"
+    file_name = "Torrent files/amanita.torrent"
     logging.debug(f"Starting torrent download: {file_name}")
     try:
         data = Torrent(file_name)
