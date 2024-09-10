@@ -34,6 +34,7 @@ class PeerConnection:
         self._available_pieces = None
 
     async def download(self):
+        # устанавливаем соединение
         try:
             self._reader, self._writer = await asyncio.wait_for(
                 asyncio.open_connection(self._ip, self._port), timeout=5)
@@ -43,16 +44,16 @@ class PeerConnection:
 
         logger.debug("Send handshake")
         handshake = self._generate_handshake()
-        await self._write(handshake)
+        await self._send(handshake)
 
-        response = await self._read(len(handshake))
+        response = await self._receive(len(handshake))
         if not response:
             logger.error("Failed to receive handshake")
             return
         logger.info(f"Got handshake, peer id: {response[48:]}")
 
         while True:
-            len_bytes_to_read = await self._read(4)
+            len_bytes_to_read = await self._receive(4)
             if not len_bytes_to_read:
                 logger.debug("No more bytes. Disconnecting")
                 break
@@ -63,7 +64,7 @@ class PeerConnection:
                 logger.debug("Keep alive")
                 continue
 
-            message = await self._read(len_value_to_read)
+            message = await self._receive(len_value_to_read)
             if not message:
                 logger.debug("Can't read message. Disconnecting")
                 break
@@ -113,9 +114,9 @@ class PeerConnection:
     async def _send_interested_message(self):
         interested_message = b"\0\0\0\1\2"  # 4 байта длина сообщения, 5-ый байт - код сообщения
         logger.debug(f"Sending message: Interested")
-        await self._write(interested_message)
+        await self._send(interested_message)
 
-    async def _read(self, n):
+    async def _receive(self, n):
         try:
             data = await self._reader.readexactly(n)
             logger.debug(f"Read: Received {n} bytes from {self._ip}:{self._port}")
@@ -127,9 +128,9 @@ class PeerConnection:
             logger.error(f"Failed to read {n} bytes, reason: {str(e)}")
             return b""
 
-    async def _write(self, data):
+    async def _send(self, data):
         self._writer.write(data)
-        logger.debug(f"Write: Sending data to {self._ip}:{self._port}")
+        logger.debug(f"Sending data to {self._ip}:{self._port}")
         await self._writer.drain()
 
     def _generate_handshake(self) -> bytes:
