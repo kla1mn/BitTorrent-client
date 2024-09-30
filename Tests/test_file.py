@@ -1,6 +1,6 @@
 import unittest
 
-from file import File
+from src.file import File
 
 
 class TestFileClass(unittest.TestCase):

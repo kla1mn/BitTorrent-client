@@ -6,14 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="35091b4e-6446-4f64-b3be-6d888d8eedf6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file.py" beforeDir="false" afterPath="$PROJECT_DIR$/file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/file_saver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/peer_connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/peer_connection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/torrent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/tracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tests/test_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/test_file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/file_saver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/peer_connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/peer_connection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/torrent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +84,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/client.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/client.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -171,7 +172,7 @@
       <workItem from="1726467361546" duration="807000" />
       <workItem from="1726468854310" duration="165000" />
       <workItem from="1726469682586" duration="30000" />
-      <workItem from="1727677083471" duration="8458000" />
+      <workItem from="1727677083471" duration="9150000" />
     </task>
     <servers />
   </component>
@@ -191,7 +192,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/BitTorrent_client$download.coverage" NAME="download Coverage Results" MODIFIED="1723974662395" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Downloads/pidorrent-main" />
-    <SUITE FILE_PATH="coverage/BitTorrent_client$client.coverage" NAME="client Coverage Results" MODIFIED="1727692518715" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BitTorrent_client$client.coverage" NAME="client Coverage Results" MODIFIED="1727694536114" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BitTorrent_client$main.coverage" NAME="client Coverage Results" MODIFIED="1723298601142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BitTorrent_client$.coverage" NAME=" Coverage Results" MODIFIED="1723536953116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/BitTorrent_client$meeting_counter.coverage" NAME="meeting_counter Coverage Results" MODIFIED="1723474852240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Downloads/Telegram files" />
