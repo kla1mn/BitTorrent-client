@@ -59,15 +59,13 @@ class Tracker:
 
     def _get_parameters(self) -> dict[str, str | int | bytes]:
         """Returns dictionary of unquoted parameters for https request."""
-        return {
-            "info_hash": self._torrent.info_hash(),
-            "peer_id": self._peer_id,
-            "port": 6881,
-            "uploaded": 0,
-            "downloaded": 0,
-            "left": self._torrent.size,
-            "event": Events.STARTED
-        }
+        return {"info_hash": self._torrent.info_hash(),
+                "peer_id": self._peer_id,
+                "port": 6881,
+                "uploaded": 0,
+                "downloaded": 0,
+                "left": self._torrent.size,
+                "event": Events.STARTED}
 
     def _get_quoted_parameters(self) -> str:
         """Returns dictionary of quoted parameters for https request."""

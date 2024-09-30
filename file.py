@@ -9,8 +9,8 @@ logger.setLevel(LOGGING_LEVEL)
 
 class File:
     def __init__(self, directory, length):
-        self.directory = os.path.dirname(directory)  # TODO проверить на большой вложенности: if directory else ""
-        self.name = os.path.basename(directory)  # TODO проверить на большой вложенности: if directory else directory
+        self.directory = os.path.dirname(directory)
+        self.name = os.path.basename(directory)
         self.length = length
         logger.debug(f"File {self.name} initialized")
 

@@ -15,7 +15,7 @@ __author__ = "https://github.com/kla1mn"
 
 
 async def main():
-    file_name = "Torrent files/amanita.torrent"
+    file_name = "Torrent files/green_day.torrent"
     logging.debug(f"Starting torrent download: {file_name}")
     try:
         data = Torrent(file_name)
@@ -23,8 +23,8 @@ async def main():
         peer_id = generate_peer_id()
         tracker = Tracker(data, peer_id)
         peers = await tracker.get_peers()
-        connections = [PeerConnection(peer.ip, peer.port, data, peer_id) for peer in peers]
-        tasks = [peer.download() for peer in connections]
+        connections = [PeerConnection(peer.ip, peer.port, data, peer_id, file_saver) for peer in peers]
+        tasks = [peer.process() for peer in connections]
         await asyncio.gather(*tasks)
     except Exception as e:
         logger.debug(f"An error occurred: {e}")

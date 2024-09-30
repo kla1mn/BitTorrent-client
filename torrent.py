@@ -15,7 +15,6 @@ class Torrent:
         self._data = Torrent.decode_file(file)
         logger.debug("Torrent data decoded")
         self._announce_url = self._data['announce']
-        # self._announce_list = self._data['announce-list']
         self._info = self._data['info']
         self._name = self._info['name']
         self._pieces = self._info['pieces']
@@ -41,6 +40,10 @@ class Torrent:
     @property
     def pieces_count(self):
         return self._pieces_count
+
+    @property
+    def bytes_count_per_piece(self):
+        return self._bytes_count_per_piece
 
     def info_hash(self) -> bytes:
         """Returns hash of info's dictionary of torrent data in bytes."""
